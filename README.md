@@ -7,7 +7,7 @@ I am creating my first API project using a restaurants JSON File, building a res
 Clone the repository into your computer and have fun editing the API.
 
 ```bash
-git clone "myrepository"
+git clone "https://github.com/HCFerraz/restaurantsAPI.git"
 ```
 ## Techs
 - HTML / CSS
