@@ -1,6 +1,6 @@
 # About the Project
 
-I am creating my first API project using a restaurants JSON File, building a responsive interactive web page and allowing users to register their own restaurants in a new DataBase. 
+I am creating my first API using a restaurants JSON File, building a responsive interactive web page and allowing users to register their own restaurants in a new DataBase. 
 
 ## Installation
 
