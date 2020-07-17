@@ -11,14 +11,31 @@ const isAuthorized = async (req, res) => {
     const token = req.header('Token');
     const user = await User.findOne({ token: token });
     if (!user) {
-        res.status(401).json({ message: 'Acesso negado: token inválido' });
+        res.status(401).json({ message: 'Access denied: Invalid Token' });
         return false;
     };
     return true;
 };
+const pagination = async (req, query, countDocuments) => {
+    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page);
+    const skip = (page - 1) * limit;
+
+    const restaurants = await query.limit(limit).skip(skip);
+    const numberOfRestaurants = await countDocuments;
+
+    const result = {
+        data: restaurants,
+    };
+    const hasNextPage = Math.ceil(numberOfRestaurants / limit) > page;
+    if (hasNextPage) {
+        result.nextPage = `http://localhost:3000/restaurants?limit=${limit}&page=${page + 1}`;
+    };
+    return result;
+}
 
 function routes(app) {
-    app.post('/signup', async (req, res) => {
+    app.post('/signUp', async (req, res) => {
         const email = req.body.email;
         const user = await User.findOne({ email: email });
         if (user) {
@@ -39,40 +56,32 @@ function routes(app) {
     });
 
     app.get('/restaurants', async (req, res) => {
-        const limit = parseInt(req.query.limit);
-        const page = parseInt(req.query.page);
-        const skip = (page - 1) * limit;
-
-        co
-        const restaurants = await Restaurant.find().limit(limit).skip(skip);
-        const numberOfRestaurants = await Restaurant.countDocuments();
-
-        const result = {
-            data: restaurants,
-        };
-        const hasNextPage = Math.ceil(numberOfRestaurants / limit) > page;
-        if (hasNextPage) {
-            result.nextPage = `http://localhost:3000/restaurants?limit=${limit}&page=${page + 1}`;
-        };
-        res.status(200).json(result);
+        const response = await pagination(req, Restaurant.find(), Restaurant.countDocuments())
+        res.status(200).json(response);
     });
 
     app.get('/restaurant/name/:name', async (req, res) => {
         const getRestaurantName = capitalizeWords([req.params.name]);
-        const restaurantsByName = await Restaurant.find({ name: getRestaurantName }, { _id: 1, cuisine: 1, borough: 1, name: 1 });
-        !restaurantsByName || restaurantsByName.length == 0 ? res.status(404).json() : res.status(200).json(restaurantsByName)
+        const restaurantsByName = Restaurant.find({ name: getRestaurantName }, { _id: 1, cuisine: 1, borough: 1, name: 1 });
+        const response = await pagination(req, restaurantsByName, Restaurant.countDocuments())
+        const notExistRestaurant = !response || response.data.length == 0;
+        notExistRestaurant ? res.status(404).send('The restaurant has not been found') : res.status(200).json(response.data)
     });
 
     app.get('/restaurant/borough/:borough', async (req, res) => {
         const getBoroughName = capitalizeWords([req.params.borough]);
-        const restaurantsByBorough = await Restaurant.find({ borough: getBoroughName }, { _id: 0, name: 1, cuisine: 1, borough: 1 });
-        !restaurantsByBorough || restaurantsByBorough.length == 0 ? res.status(404).json() : res.status(200).json(restaurantsByBorough)
+        const restaurantsByBorough = Restaurant.find({ borough: getBoroughName }, { _id: 0, name: 1, cuisine: 1, borough: 1 });
+        const response = await pagination(req, restaurantsByBorough, Restaurant.countDocuments())
+        const notExistRestaurant = !response || response.data.length == 0;
+        notExistRestaurant ? res.status(404).send('The restaurant has not been found') : res.status(200).json(response.data)
     });
 
     app.get('/restaurant/cuisine/:cuisine', async (req, res) => {
         const getCuisineName = capitalizeWords([req.params.cuisine]);
-        const restaurantsByCuisine = await Restaurant.find({ cuisine: getCuisineName }, { _id: 0, name: 1, borough: 1, cuisine: 1 });
-        !restaurantsByCuisine || restaurantsByCuisine.length == 0 ? res.status(404).json() : res.status(200).json(restaurantsByCuisine)
+        const restaurantsByCuisine = Restaurant.find({ cuisine: getCuisineName }, { _id: 0, name: 1, borough: 1, cuisine: 1 });
+        const response = await pagination(req, restaurantsByCuisine, Restaurant.countDocuments());
+        const notExistRestaurant = !response || response.data.length == 0;
+        notExistRestaurant ? res.status(404).send('The restaurant has not been found') : res.status(200).json(response.data)
     });
 
     app.post('/restaurants/add', async (req, res) => {
@@ -126,9 +135,9 @@ function routes(app) {
 
     app.delete('/removeOneRestaurant', async (req, res) => {
         if (!await isAuthorized(req, res)) return;
-        const deletedRestaurant = Restaurant.deleteOne({ name: req.body.name })
+        const deletedRestaurant = await Restaurant.deleteOne({ cuisine: req.body.cuisine })
         try {
-            deletedRestaurant.length <= 0 ? res.status(404) : res.status(200).json('The Restaurant was removed successfully')
+            deletedRestaurant.deletedCount > 0 ? res.status(200).send('The Restaurant was removed successfully') : res.status(404).json()
         } catch (error) {
             res.status(500).json({ status: 500, message: error.message})
         }
@@ -136,9 +145,9 @@ function routes(app) {
 
     app.delete('/removeManyRestaurants', async (req, res) => {
         if (!await isAuthorized(req, res)) return;
-        const deletedRestaurants = Restaurant.deleteMany({ name: req.body.name })
+        const deletedRestaurants = await Restaurant.deleteMany({ cuisine: req.body.cuisine })
         try {
-            deletedRestaurants.length <= 0 ? res.status(404) : res.status(200).json('The Restaurants were removed successfully')
+            deletedRestaurants.deletedCount > 0 ? res.status(200).send('The Restaurants were removed successfully') : res.status(404).json()
         } catch (error) {
             res.status(500).json({ status: 500, message: error.message})
         }
@@ -146,3 +155,33 @@ function routes(app) {
 }
 
 module.exports = routes
+
+/* <html>
+	<body>
+		<form action="/restaurant/add" method="post">
+			<input name='email'>
+			<input name='senha'>
+			<button></button>
+		</form>
+	</body>
+</html> */
+
+// document.addEventListener(click, document.querySelector('#buttonid'), executa)
+
+// function executa(event) {
+// 	event.preventDefault();
+
+
+// }
+
+//const bodyParser = require('body-parser');
+// app.use(bodyParser.urlencoded({ extended: true }));
+// Then the form values will be on req.body:
+
+// app.post('/game', function (req, res) {
+//     res.render('the_template', { name: req.body.name });
+// });
+
+//https://www.tutorialspoint.com/expressjs/expressjs_form_data.htm
+//https://stackoverflow.com/a/38763341/690049
+
