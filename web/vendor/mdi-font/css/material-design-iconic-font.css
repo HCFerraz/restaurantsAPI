@@ -682,9 +682,9 @@
 .zmdi-pin-off:before {
   content: '\f1aa';
 }
-.zmdi-pin:before {
+/* .zmdi-pin:before {
   content: '\f1ab';
-}
+} */
 .zmdi-pizza:before {
   content: '\f1ac';
 }
@@ -3013,9 +3013,9 @@
 .zmdi-pin-off:before {
   content: '\f1aa';
 }
-.zmdi-pin:before {
+/* .zmdi-pin:before {
   content: '\f1ab';
-}
+} */
 .zmdi-pizza:before {
   content: '\f1ac';
 }

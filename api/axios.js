@@ -1,4 +1,4 @@
-const axios = require('axios').default;
+const axios = require('../node_modules/axios').default;
 
 const TOKEN1 = 'edaf0187-0e7b-456e-a177-cd05a95bf42a';
 // data: {name: 'New Restaurant'}

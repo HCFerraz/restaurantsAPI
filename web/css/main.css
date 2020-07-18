@@ -94,7 +94,6 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
 /**
  * 1. Reset Chrome and Firefox behaviour which sets a `min-width: min-content;`
  *    on fieldsets.
@@ -187,7 +186,8 @@ a:active {
    #BACKGROUND
    ========================================================================== */
 .bg-img-1 {
-  background: url("../images/bg-img-01.jpg") center center/cover no-repeat;
+  /* background: url("../images/bg-img-01.jpg") center center/cover no-repeat; */
+  background-color: #555;
 }
 
 /* ==========================================================================
@@ -211,9 +211,9 @@ a:active {
   }
 }
 
-.p-t-165 {
+/* .p-t-165 {
   padding-top: 165px;
-}
+} */
 
 @media (max-width: 767px) {
   .p-t-165 {
@@ -222,7 +222,11 @@ a:active {
 }
 
 .p-b-100 {
-  padding-bottom: 100px;
+  flex-wrap: wrap;
+  justify-items: center;
+  align-items: center;
+  display: flex;
+}
 }
 
 @media (max-width: 767px) {
@@ -498,7 +502,7 @@ button {
 .input-group-symbol {
   position: absolute;
   font-size: 24px;
-  color: #ccc;
+  color: rgb(187, 53, 53);
   left: 18px;
   bottom: 10px;
 }

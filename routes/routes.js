@@ -1,7 +1,7 @@
-require('./database');
-const uuid = require('uuid');
-const Restaurant = require('./restaurants model');
-const User = require('./users model');
+require('../database');
+const uuid = require('../node_modules/uuid');
+const Restaurant = require('../models/restaurants model');
+const User = require('../models/users model');
 
 const capitalizeWords = wordsArray => wordsArray.map(wordsString => wordsString
     .split(' ').map(letter => letter[0].toUpperCase() + letter
