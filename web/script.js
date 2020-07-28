@@ -1,11 +1,35 @@
-function restSearch() {
-    const receiveRestaurant = document.getElementById('restaurant').value
-    returnRestaurant(receiveRestaurant)
-}
 function restAllSearch() {
     returnAll()
 }
-const callForRest = async (restaurant) => {
+function restNameSearch() {
+    const receiveRestaurant = document.getElementById('restaurant').value
+    returnRestaurantByName(receiveRestaurant)
+}
+function restBoroughSearch() {
+    const receiveRestaurant = document.getElementById('restaurant').value
+    returnRestaurantByBorough(receiveRestaurant)
+}
+function restCuisineSearch() {
+    const receiveRestaurant = document.getElementById('restaurant').value
+    returnRestaurantByCuisine(receiveRestaurant)
+}
+const callForRestName = async (restaurant) => {
+    try {
+        const newRestaurant = await axios.get(`http://localhost:3000/restaurant/name/${restaurant}`)
+        return newRestaurant.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+const callForRestBorough = async (restaurant) => {
+    try {
+        const newRestaurant = await axios.get(`http://localhost:3000/restaurant/borough/${restaurant}`)
+        return newRestaurant.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+const callForRestCuisine = async (restaurant) => {
     try {
         const newRestaurant = await axios.get(`http://localhost:3000/restaurant/cuisine/${restaurant}`)
         return newRestaurant.data
@@ -13,8 +37,14 @@ const callForRest = async (restaurant) => {
         console.log(error)
     }
 }
-const returnRestaurant = (restaurant) => {
-    callForRest(restaurant).then(response => console.log(response)).catch(error => console.log(error))
+const returnRestaurantByName = (restaurant) => {
+    callForRestName(restaurant).then(response => console.log(response)).catch(error => console.log(error))
+}
+const returnRestaurantByBorough = (restaurant) => {
+    callForRestBorough(restaurant).then(response => console.log(response)).catch(error => console.log(error))
+}
+const returnRestaurantByCuisine = (restaurant) => {
+    callForRestCuisine(restaurant).then(response => console.log(response)).catch(error => console.log(error))
 }
 const returnAll = () => {
     axios.get(`http://localhost:3000/restaurants`).then((response => console.log(response))).catch(error => console.log(error))

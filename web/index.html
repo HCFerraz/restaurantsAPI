@@ -10,8 +10,10 @@
     <h1>Funciona</h1>
     <div class="contain">
         <input id="restaurant">
-        <button type="submit" id="submitRest" onclick="restSearch()">Click Here</button>
-        <button type="submit" id="subAll" onclick="restAllSearch()">Click Here</button>
+        <button type="submit" id="subAll" onclick="restAllSearch()">All</button>
+        <button type="submit" id="subName" onclick="restNameSearch()">Name</button>
+        <button type="submit" id="subBorough" onclick="restBoroughSearch()">Borough</button>
+        <button type="submit" id="subCuisine" onclick="restCuisineSearch()">Cuisine</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./script.js"></script>
