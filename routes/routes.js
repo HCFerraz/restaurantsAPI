@@ -135,7 +135,7 @@ function routes(app) {
 
     app.delete('/removeOneRestaurant', async (req, res) => {
         if (!await isAuthorized(req, res)) return;
-        const deletedRestaurant = await Restaurant.deleteOne({ cuisine: req.body.cuisine })
+        const deletedRestaurant = await Restaurant.deleteOne({ name: req.body.name })
         try {
             deletedRestaurant.deletedCount > 0 ? res.status(200).send('The Restaurant was removed successfully') : res.status(404).json()
         } catch (error) {
@@ -145,7 +145,7 @@ function routes(app) {
 
     app.delete('/removeManyRestaurants', async (req, res) => {
         if (!await isAuthorized(req, res)) return;
-        const deletedRestaurants = await Restaurant.deleteMany({ cuisine: req.body.cuisine })
+        const deletedRestaurants = await Restaurant.deleteMany({ name: req.body.name })
         try {
             deletedRestaurants.deletedCount > 0 ? res.status(200).send('The Restaurants were removed successfully') : res.status(404).json()
         } catch (error) {
