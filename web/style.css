@@ -1,0 +1,9 @@
+.contain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#restaurant, #submitRest, #subAll {
+    flex: 1;
+}
