@@ -4,6 +4,6 @@
     align-items: center;
 }
 
-#restaurant, #submitRest, #subAll {
+#restaurant, #subAll, #subName, #subBorough, #subCuisine {
     flex: 1;
 }
