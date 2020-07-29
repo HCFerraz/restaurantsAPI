@@ -1,3 +1,4 @@
+// ------------------------------ CLICKS
 function restAllSearch() {
     returnAll()
 }
@@ -13,6 +14,11 @@ function restCuisineSearch() {
     const receiveRestaurant = document.getElementById('restaurant').value
     returnRestaurantByCuisine(receiveRestaurant)
 }
+function auth() {
+    const receiveEmail = document.getElementById('restaurant').value
+    signUser(receiveEmail)
+}
+// ------------------------------ GETS
 const callForRestName = async (restaurant) => {
     try {
         const newRestaurant = await axios.get(`http://localhost:3000/restaurant/name/${restaurant}`)
@@ -49,3 +55,16 @@ const returnRestaurantByCuisine = (restaurant) => {
 const returnAll = () => {
     axios.get(`http://localhost:3000/restaurants`).then((response => console.log(response))).catch(error => console.log(error))
 }
+// ------------------------------ POSTS
+const signUser = async (auth) => {
+    try {
+        console.log(auth)
+        const newAuth = await axios.post('http://localhost:3000/signUp', {email: auth})
+        return newAuth.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+// ------------------------------ PUTS
+
+// ------------------------------ DELETES
