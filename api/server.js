@@ -4,7 +4,7 @@ const routes = require('../routes/routes');
 const bodyParser = require('../node_modules/body-parser');
 const cors = require('../node_modules/cors')
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(bodyParser.json())
 app.use(cors())
 
 routes(app)
